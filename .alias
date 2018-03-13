@@ -1,0 +1,30 @@
+# for doing git commands on ~/.cfg
+
+alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+
+# List declared aliases, functions, paths
+
+alias aliases="alias | sed 's/=.*//'"
+alias functions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
+alias paths='echo -e ${PATH//:/\\n}'
+
+# Directory listing/traversal
+
+alias l="ls -lahA --color -G --group-directories-first"
+alias la="ls -a --color -G --group-directories-first"
+alias ll="ls -lA --color -G"
+alias lt="ls -lhAtr --color -G --group-directories-first"
+alias ld="ls -ld --color -G */"
+alias lpm="stat -c '%a %n' *"
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias -- -="cd -"                  # Go to previous dir with -
+alias cd.='cd $(readlink -f .)'    # Go to real dir (i.e. if current dir is linked)
+
+alias tree="tree -A"
+alias treed="tree -d"
+alias tree1="tree -d -L 1"
+alias tree2="tree -d -L 2"
+

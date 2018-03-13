@@ -1,0 +1,18 @@
+[user]
+  name = Patrick Irving
+  email = psirving@email.unc.edu
+
+[github]
+  user = psirving
+
+[core]
+  excludesfile = ~/.gitignore_global
+
+[alias]
+  st = status
+  co = checkout
+  ci = commit
+  br = branch
+  df = diff
+  dfs = diff --staged
+  logg = log --graph --decorate --oneline --abbrev-commit --all
