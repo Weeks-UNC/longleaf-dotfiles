@@ -1,14 +1,21 @@
+# .alias
+# ==============================================================================
 # for doing git commands on ~/.cfg
+# ==============================================================================
 
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
+# ==============================================================================
 # List declared aliases, functions, paths
+# ==============================================================================
 
 alias aliases="alias | sed 's/=.*//'"
 alias functions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
 alias paths='echo -e ${PATH//:/\\n}'
 
+# ==============================================================================
 # Directory listing/traversal
+# ==============================================================================
 
 alias l="ls -lahA --color -G --group-directories-first"
 alias la="ls -a --color -G --group-directories-first"
