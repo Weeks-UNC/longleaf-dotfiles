@@ -18,10 +18,3 @@ fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
-
-# User specific aliases and functions
-
-# Ensure user-installed binaries take precedence
-export PATH=~/bin:$PATH
-export PATH="/usr/local/git/bin:/sw/bin/:/usr/local/bin:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
-export PYTHONPATH="$PYTHONPATH:~/bin"
