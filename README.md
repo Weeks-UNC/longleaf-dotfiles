@@ -15,7 +15,7 @@ Log into Longleaf and install git:
 ssh <your-onyen>@longleaf.unc.edu
 Password: <your-password>
 module load git
-module save git
+module save
 vi install-dotfiles.sh
 ```
 Copy and paste the text from [install-dotfiles.sh](install/install-dotfiles.sh).
