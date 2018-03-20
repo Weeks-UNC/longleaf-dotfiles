@@ -39,4 +39,5 @@ alias tree2="tree -d -L 2"
 # SLURM related aliases
 # ==============================================================================
 
+alias touche="find . -exec touch {} \;"
 alias bjobs="squeue -u $USER"
