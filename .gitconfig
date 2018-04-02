@@ -1,13 +1,3 @@
-[user]
-  name = Patrick Irving
-  email = psirving@email.unc.edu
-
-[github]
-  user = psirving
-
-[core]
-  excludesfile = ~/.gitignore_global
-
 [alias]
   st = status
   co = checkout
