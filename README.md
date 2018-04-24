@@ -2,6 +2,12 @@ Longleaf Dotfiles
 ================================================================================
 Configuration and installation on the Longleaf computing cluster.
 
+What is it?
+--------------------------------------------------------------------------------
+This repository is for anything that simplifies Longleaf set-up. It contains:
+- convenient aliases, functions, and environment variables
+- installation scripts and template SLURM submission scripts for common software
+
 Before starting:
 --------------------------------------------------------------------------------
 You will need access to Longleaf:
