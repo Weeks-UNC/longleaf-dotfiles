@@ -6,7 +6,7 @@
 
 function folders() {
   for F in *.fastq.gz; do
-    mkdir -p `expr match "$F" '.*_\(S[0-9]\{1,2\}\)'`
+    mkdir -p Sample_`expr match "$F" '.*_S\([0-9]\{1,2\}\)'`
     mv $F Sample_`expr match "$F" '.*_S\([0-9]\{1,2\}\)'`
   done
 }
@@ -30,6 +30,7 @@ function v() {
 		vim "$@";
 	fi;
 }
+
 # ==============================================================================
 # Compress file with the appropriate command
 # ==============================================================================
