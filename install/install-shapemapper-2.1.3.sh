@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # To run this script, use:
-# source install_shapemapper2.sh
+# source install-shapemapper-2.1.3.sh
 
 START_DIR=$(pwd)
 builtin cd $HOME
