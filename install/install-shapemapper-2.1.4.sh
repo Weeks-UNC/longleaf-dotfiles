@@ -14,7 +14,7 @@ tar xzf shapemapper-2.1.4.tar.gz
 rm shapemapper-2.1.4.tar.gz
 
 export PATH="$PATH:~/shapemapper-2.1.4/"
-echo 'export PATH="$PATH:~/shapemapper-2.1.3/"' >> .bash_$USER
+echo 'export PATH="$PATH:~/shapemapper-2.1.4/"' >> .bash_$USER
 echo 'Shapemapper added to PATH, installation successful'
 
 builtin cd $START_DIR
