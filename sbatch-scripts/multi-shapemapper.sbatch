@@ -26,3 +26,5 @@ declare -a tasks=(
 "~/shapemapper-2.1.3/shapemapper --target reference.fa --name 'experiment-4' --overwrite --min-depth 4000 --modified --folder 4plus --untreated --folder 4minus --output-classified"
 )
 eval ${tasks[$SLURM_ARRAY_TASK_ID]}
+
+sacct -j $SLURM_JOB_ID --format='JobID, user, priority, submit, start, elapsed, cputime, totalCPU, ncpus, NTasks, ExitCode'
