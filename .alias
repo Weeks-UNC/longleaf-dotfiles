@@ -42,4 +42,4 @@ alias tree2="tree -d -L 2"
 
 alias touche="find . -exec touch {} \;"
 alias bjobs="squeue -u $USER"
-alias watch-jobs="watch -n 1 \"squeue -u $USER\""
+alias watch-jobs="watch -n 30 \"squeue -u $USER\""
