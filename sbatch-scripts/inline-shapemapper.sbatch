@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 sbatch -t 60 \
---mem=10g \
 --partition=general \
 --ntasks=6 \
 --nodes=1 \
