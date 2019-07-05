@@ -10,6 +10,11 @@
 # Please see http://help.unc.edu/help/modules-approach-to-software-management/
 # for more details on module usage.
 
+#load all dot-files
+for file in ~/.{prompt,alias,functions,env,bash_$USER};
+  do [ -f "$file" ] && source "$file";
+done;
+unset file;
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
