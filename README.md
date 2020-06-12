@@ -16,16 +16,21 @@ You will need access to Longleaf:
 
 Setting Up:
 --------------------------------------------------------------------------------
+First, a note: Following these steps will move your current .bash_profile and
+.bashrc to a new directory called .config_backup. If you want to customize your
+environment, you should put them in a file called ".bash_<your-onyen>". For
+example, mine would be ".bash_psirving". This file will be loaded every time
+you log in, but it won't be tracked by git.
+
 Log into Longleaf and install git:
 ```
 ssh <your-onyen>@longleaf.unc.edu
 Password: <your-password>
 module load git
 module save
-vi install-dotfiles.sh
 ```
-Copy and paste the text from [install-dotfiles.sh](install/install-dotfiles.sh).
-Close ViM.
+Copy the install-dotfiles.sh file from this repo, and run it.
 ```
+wget 'https://github.com/Weeks-UNC/longleaf-dotfiles/blob/master/install/install-dotfiles.sh'
 source install-dotfiles.sh
 ```
