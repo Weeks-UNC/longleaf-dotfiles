@@ -14,7 +14,9 @@ unzip master.zip && mv RNATools-master RNATools
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/RNATools/"
+export PATH="$PATH:$HOME/RNATools/"
 echo 'export PYTHONPATH="$PYTHONPATH:$HOME/RNATools/"' >> .bash_$USER
+echo 'export PATH="$PATH:$HOME/RNATools/"' >> .bash_$USER
 
 echo 'RNATools added to PATH, installation complete'
 

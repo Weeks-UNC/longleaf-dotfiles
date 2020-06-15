@@ -14,7 +14,9 @@ unzip master.zip && mv RingMapper-master RingMapper
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/RingMapper/"
+export PATH="$PATH:$HOME/RingMapper/"
 echo 'export PYTHONPATH="$PYTHONPATH:$HOME/RingMapper/"' >> .bash_$USER
+echo 'export PATH="$PATH:$HOME/RingMapper/"' >> .bash_$USER
 
 builtin cd RingMapper
 echo 'Running setup.py...'

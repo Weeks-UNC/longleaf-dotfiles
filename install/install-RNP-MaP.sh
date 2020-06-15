@@ -14,7 +14,9 @@ unzip master.zip && mv RNP-MaP-master RNP-MaP
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/RNP-MaP/"
+export PATH="$PATH:$HOME/RNP-MaP/"
 echo 'export PYTHONPATH="$PYTHONPATH:$HOME/RNP-MaP/"' >> .bash_$USER
+echo 'export PATH="$PATH:$HOME/RNP-MaP/"' >> .bash_$USER
 
 echo 'RNP-MaP added to PATH, installation complete'
 

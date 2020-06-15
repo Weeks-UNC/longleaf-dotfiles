@@ -14,7 +14,9 @@ unzip master.zip && mv arcPlot-master arcPlot
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/arcPlot/"
+export PATH="$PATH:$HOME/arcPlot/"
 echo 'export PYTHONPATH="$PYTHONPATH:$HOME/arcPlot/"' >> .bash_$USER
+echo 'export PATH="$PATH:$HOME/arcPlot/"' >> .bash_$USER
 
 builtin cd arcPlot
 
