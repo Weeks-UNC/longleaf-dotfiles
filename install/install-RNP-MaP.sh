@@ -10,7 +10,7 @@ echo 'Downloading RNP-MaP...'
 wget 'https://github.com/Weeks-UNC/RNP-MaP/archive/master.zip'
 
 echo 'Extracting RNP-MaP...'
-tar xzf master.zip && mv RNP-MaP-master RNP-MaP
+unzip master.zip && mv RNP-MaP-master RNP-MaP
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/RNP-MaP/"

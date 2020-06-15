@@ -10,7 +10,7 @@ echo 'Downloading RingMapper...'
 wget 'https://github.com/Weeks-UNC/RingMapper/archive/master.zip'
 
 echo 'Extracting RingMapper...'
-tar xzf master.zip && mv RingMapper-master RingMapper
+unzip master.zip && mv RingMapper-master RingMapper
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/RingMapper/"

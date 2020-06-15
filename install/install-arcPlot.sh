@@ -10,7 +10,7 @@ echo 'Downloading arcPlot...'
 wget 'https://github.com/Weeks-UNC/arcPlot/archive/master.zip'
 
 echo 'Extracting arcPlot...'
-tar xzf master.zip && mv arcPlot-master arcPlot
+unzip master.zip && mv arcPlot-master arcPlot
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/arcPlot/"

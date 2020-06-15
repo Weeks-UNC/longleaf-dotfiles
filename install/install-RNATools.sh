@@ -10,7 +10,7 @@ echo 'Downloading RNATools...'
 wget 'https://github.com/Weeks-UNC/RNATools/archive/master.zip'
 
 echo 'Extracting RNATools...'
-tar xzf master.zip && mv RNATools-master RNATools
+unzip master.zip && mv RNATools-master RNATools
 rm master.zip
 
 export PYTHONPATH="$PYTHONPATH:$HOME/RNATools/"
