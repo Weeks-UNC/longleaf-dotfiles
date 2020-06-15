@@ -7,11 +7,11 @@ START_DIR=$(pwd)
 builtin cd $HOME
 
 echo 'Downloading Ensemble-MaP...'
-wget 'https://github.com/Weeks-UNC/Ensemble-MaP/archive/v1.0-alpha.tar.gz'
+wget 'https://github.com/Weeks-UNC/Ensemble-MaP/archive/master.zip'
 
 echo 'Extracting Ensemble-MaP...'
-tar xzf v1.0-alpha.tar.gz && mv v1.0-alpha Ensemble-MaP
-rm v1.0-alpha.tar.gz
+unzip master.zip && mv Ensemble-MaP-master Ensemble-MaP
+rm master.zip
 
 export PATH="$PATH:$HOME/Ensemble-MaP/"
 echo 'export PYTHONPATH="$PYTHONPATH:$HOME/Ensemble-MaP/"' >> .bash_$USER
