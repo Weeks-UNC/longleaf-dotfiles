@@ -31,6 +31,6 @@ module save
 ```
 Copy the install-dotfiles.sh file from this repo, and run it.
 ```
-wget 'https://github.com/Weeks-UNC/longleaf-dotfiles/blob/master/install/install-dotfiles.sh'
+wget 'https://raw.githubusercontent.com/Weeks-UNC/longleaf-dotfiles/master/install/install-dotfiles.sh'
 source install-dotfiles.sh
 ```
