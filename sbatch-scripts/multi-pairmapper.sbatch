@@ -1,33 +1,41 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=pairmapper
 #SBATCH --output=pairmapper_%A_%a.out
-#SBATCH --array=0-7
+#SBATCH --array=0-3
 #SBATCH --time=1:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=<your-email-address>
+
+
 ################################################################################
-# Edit the strings under 'declare -a tasks=(' to match your experiments.
+# 1. Copy this file to the directory you wish to run it from.
+# 1. Edit the strings under 'declare -a tasks=(' to match your experiments.
+# 2. Edit array above to match the number of tasks defined in step 1.
+# 3. If you want email notification, edit mail-user above
+# 4. If not, delete the lines with mail-type and mail-user.
 #
-# The --array variable creates an array [0,1,2,3]. Change it so that the length
-# is how many jobs you need (same as number of strings under $tasks).
+# The --array variable above creates an inclusive array, i.e. 0-3 = 0,1,2,3.
+# One job is submitted for each value, which is stored as SLURM_ARRAY_TASK_ID.
+# Below, this value is used with eval to run one task per job. You can pick and
+# choose which tasks are evaluated. For example, to ignore tasks 4-7 out of 16:
+#     --array=0-3,8-15
 #
-# This script is submitted that many times, but only one line from $tasks is
-# evaluated each time.
-#
-# To call this script:
+# To submit the job array to longleaf:
 # sbatch multi-shapemapper.sbatch
 ################################################################################
+
+
 declare -a tasks=(
 "pairmapper.py --profile NAI-SSII_RMRP_profile.txt --untreated_parsed NAI-SSII_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed NAI-SSII_Modified_RMRP_parsed.mut --out NAI-SSII-RMRP"
 "pairmapper.py --profile 2API-SSII_RMRP_profile.txt --untreated_parsed 2API-SSII_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed 2API-SSII_Modified_RMRP_parsed.mut --out 2API-SSII-RMRP"
 "pairmapper.py --profile CDI-SSII_RMRP_profile.txt --untreated_parsed CDI-SSII_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed CDI-SSII_Modified_RMRP_parsed.mut --out CDI-SSII-RMRP"
 "pairmapper.py --profile DMS-SSII_RMRP_profile.txt --untreated_parsed DMS-SSII_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed DMS-SSII_Modified_RMRP_parsed.mut --out DMS-SSII-RMRP"
-"pairmapper.py --profile NAI-MRT_RMRP_profile.txt --untreated_parsed NAI-MRT_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed NAI-MRT_Modified_RMRP_parsed.mut --out NAI-MRT-RMRP"
-"pairmapper.py --profile 2API-MRT_RMRP_profile.txt --untreated_parsed 2API-MRT_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed 2API-MRT_Modified_RMRP_parsed.mut --out 2API-MRT-RMRP"
-"pairmapper.py --profile CDI-MRT_RMRP_profile.txt --untreated_parsed CDI-MRT_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed CDI-MRT_Modified_RMRP_parsed.mut --out CDI-MRT-RMRP"
-"pairmapper.py --profile DMS-MRT_RMRP_profile.txt --untreated_parsed DMS-MRT_Untreated_RMRP_parsed.mut --undersample 400000 --modified_parsed DMS-MRT_Modified_RMRP_parsed.mut --out DMS-MRT-RMRP"
 )
+
 eval ${tasks[$SLURM_ARRAY_TASK_ID]}
 
-sacct -j $SLURM_JOB_ID --format='JobID, user, priority, submit, start, elapsed, cputime, totalCPU, ncpus, NTasks, ExitCode'
+# Adds a table of SLURM jobs stats: pending time, job time, CPU and memory usage. This will be at the end of the SBATCH output file.
+sacct -j $SLURM_JOB_ID --format='JobID, submit, start, elapsed, cputime, MaxRSS'
 
 # usage: pairmapper.py [-h] [--modified_parsed MODIFIED_PARSED]
 #                      [--untreated_parsed UNTREATED_PARSED] [--profile PROFILE]

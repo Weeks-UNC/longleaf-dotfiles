@@ -1,33 +1,41 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=ringmapper
 #SBATCH --output=ringmapper_%A_%a.out
-#SBATCH --array=0-7
+#SBATCH --array=0-3
 #SBATCH --time=1:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=<your-email-address>
+
+
 ################################################################################
-# Edit the strings under 'declare -a tasks=(' to match your experiments.
+# 1. Copy this file to the directory you wish to run it from.
+# 1. Edit the strings under 'declare -a tasks=(' to match your experiments.
+# 2. Edit array above to match the number of tasks defined in step 1.
+# 3. If you want email notification, edit mail-user above
+# 4. If not, delete the lines with mail-type and mail-user.
 #
-# The --array variable creates an array [0,1,2,3]. Change it so that the length
-# is how many jobs you need (same as number of strings under $tasks).
+# The --array variable above creates an inclusive array, i.e. 0-3 = 0,1,2,3.
+# One job is submitted for each value, which is stored as SLURM_ARRAY_TASK_ID.
+# Below, this value is used with eval to run one task per job. You can pick and
+# choose which tasks are evaluated. For example, to ignore tasks 4-7 out of 16:
+#     --array=0-3,8-15
 #
-# This script is submitted that many times, but only one line from $tasks is
-# evaluated each time.
-#
-# To call this script:
+# To submit the job array to longleaf:
 # sbatch multi-shapemapper.sbatch
 ################################################################################
+
+
 declare -a tasks=(
 "ringmapper.py --fasta RMRP.fa --untreated NAI-SSII_Untreated_RMRP_parsed.mut --undersample 400000 NAI-SSII_Modified_RMRP_parsed.mut NAI-SSII-RMRP.corrs"
 "ringmapper.py --fasta RMRP.fa --untreated 2API-SSII_Untreated_RMRP_parsed.mut --undersample 400000 2API-SSII_Modified_RMRP_parsed.mut 2API-SSII-RMRP.corrs"
 "ringmapper.py --fasta RMRP.fa --untreated CDI-SSII_Untreated_RMRP_parsed.mut --undersample 400000 CDI-SSII_Modified_RMRP_parsed.mut CDI-SSII-RMRP.corrs"
 "ringmapper.py --fasta RMRP.fa --untreated DMS-SSII_Untreated_RMRP_parsed.mut --undersample 400000 DMS-SSII_Modified_RMRP_parsed.mut DMS-SSII-RMRP.corrs"
-"ringmapper.py --fasta RMRP.fa --untreated NAI-MRT_Untreated_RMRP_parsed.mut --undersample 400000 NAI-MRT_Modified_RMRP_parsed.mut NAI-MRT-RMRP.corrs"
-"ringmapper.py --fasta RMRP.fa --untreated 2API-MRT_Untreated_RMRP_parsed.mut --undersample 400000 2API-MRT_Modified_RMRP_parsed.mut 2API-MRT-RMRP.corrs"
-"ringmapper.py --fasta RMRP.fa --untreated CDI-MRT_Untreated_RMRP_parsed.mut --undersample 400000 CDI-MRT_Modified_RMRP_parsed.mut CDI-MRT-RMRP.corrs"
-"ringmapper.py --fasta RMRP.fa --untreated DMS-MRT_Untreated_RMRP_parsed.mut --undersample 400000 DMS-MRT_Modified_RMRP_parsed.mut DMS-MRT-RMRP.corrs"
 )
+
 eval ${tasks[$SLURM_ARRAY_TASK_ID]}
 
-sacct -j $SLURM_JOB_ID --format='JobID, user, priority, submit, start, elapsed, cputime, totalCPU, ncpus, NTasks, ExitCode'
+# Adds a table of SLURM jobs stats: pending time, job time, CPU and memory usage. This will be at the end of the SBATCH output file.
+sacct -j $SLURM_JOB_ID --format='JobID, submit, start, elapsed, cputime, MaxRSS'
 
 # usage: ringmapper.py [-h] [--fasta FASTA] [--untreated UNTREATED]
 #                      [--window WINDOW] [--chisq_cut CHISQ_CUT]

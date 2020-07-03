@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=shapemapper
 #SBATCH --output=shapemapper_%A_%a.out
-#SBATCH --array=0-15
+#SBATCH --array=0-3
 #SBATCH --time=1:00:00
 #SBATCH --ntasks=6
 #SBATCH --nodes=1
@@ -32,18 +32,6 @@ declare -a tasks=(
 "shapemapper --target 7SK.fa --name '2API' --modified --folder Sample_2 --untreated --folder Sample_4 --amplicon --output-parsed-mutations --out 7SK_out --temp 7SK_temp"
 "shapemapper --target 7SK.fa --name 'CDI' --modified --folder Sample_3 --untreated --folder Sample_4 --amplicon --output-parsed-mutations --out 7SK_out --temp 7SK_temp"
 "shapemapper --target 7SK.fa --name 'DMS' --modified --folder Sample_5 --untreated --folder Sample_6 --amplicon --output-parsed-mutations --out 7SK_out --temp 7SK_temp"
-"shapemapper --target RNaseP.fa --name 'NAI-RNaseP' --modified --folder Sample_7 --untreated --folder Sample_10 --amplicon --output-parsed-mutations --out RNaseP_out --temp RNaseP_temp"
-"shapemapper --target RNaseP.fa --name '2API-RNaseP' --modified --folder Sample_8 --untreated --folder Sample_10 --amplicon --output-parsed-mutations --out RNaseP_out --temp RNaseP_temp"
-"shapemapper --target RNaseP.fa --name 'CDI-RNaseP' --modified --folder Sample_9 --untreated --folder Sample_10 --amplicon --output-parsed-mutations --out RNaseP_out --temp RNaseP_temp"
-"shapemapper --target RNaseP.fa --name 'DMS-RNaseP' --modified --folder Sample_11 --untreated --folder Sample_12 --amplicon --output-parsed-mutations --out RNaseP_out --temp RNaseP_temp"
-"shapemapper --target RMRP.fa --name 'NAI-SSII' --modified --folder Sample_13 --untreated --folder Sample_18 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
-"shapemapper --target RMRP.fa --name '2API-SSII' --modified --folder Sample_14 --untreated --folder Sample_18 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
-"shapemapper --target RMRP.fa --name 'CDI-SSII' --modified --folder Sample_15 --untreated --folder Sample_18 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
-"shapemapper --target RMRP.fa --name 'DMS-SSII' --modified --folder Sample_17 --untreated --folder Sample_18 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
-"shapemapper --target RMRP.fa --name 'NAI-MRT' --modified --folder Sample_19 --untreated --folder Sample_22 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
-"shapemapper --target RMRP.fa --name '2API-MRT' --modified --folder Sample_20 --untreated --folder Sample_22 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
-"shapemapper --target RMRP.fa --name 'CDI-MRT' --modified --folder Sample_21 --untreated --folder Sample_22 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
-"shapemapper --target RMRP.fa --name 'DMS-MRT' --modified --folder Sample_23 --untreated --folder Sample_24 --amplicon --output-parsed-mutations --out RMRP_out --temp RMRP_temp"
 )
 eval ${tasks[$SLURM_ARRAY_TASK_ID]}
 
