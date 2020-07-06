@@ -1,41 +1,41 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=arcplot
 #SBATCH --output=arcplot_%A_%a.out
-#SBATCH --array=0-15
+#SBATCH --array=0-3
 #SBATCH --time=10:00
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=<your-email-address>
+
+
 ################################################################################
-# Edit the strings under 'declare -a tasks=(' to match your experiments.
+# 1. Copy this file to the directory you wish to run it from.
+# 1. Edit the strings under 'declare -a tasks=(' to match your experiments.
+# 2. Edit array above to match the number of tasks defined in step 1.
+# 3. If you want email notification, edit mail-user above
+# 4. If not, delete the lines with mail-type and mail-user.
 #
-# The --array variable creates an array [0,1,2,3]. Change it so that the length
-# is how many jobs you need (same as number of strings under $tasks).
+# The --array variable above creates an inclusive array, i.e. 0-3 = 0,1,2,3.
+# One job is submitted for each value, which is stored as SLURM_ARRAY_TASK_ID.
+# Below, this value is used with eval to run one task per job. You can pick and
+# choose which tasks are evaluated. For example, to ignore tasks 4-7 out of 16:
+#     --array=0-3,8-15
 #
-# This script is submitted that many times, but only one line from $tasks is
-# evaluated each time.
-#
-# To call this script:
+# To submit the job array to longleaf:
 # sbatch multi-shapemapper.sbatch
 ################################################################################
+
+
 declare -a tasks=(
-"arcPlot.py --ct RMRP.ct --ringsig NAI-SSII-RMRP.corrs --profile NAI-SSII_RMRP.shape NAI-SSII-RMRP-ringsig.pdf"
 "arcPlot.py --ct RMRP.ct --ringsig 2API-SSII-RMRP.corrs --profile 2API-SSII_RMRP.shape 2API-SSII-RMRP-ringsig.pdf"
-"arcPlot.py --ct RMRP.ct --ringsig CDI-SSII-RMRP.corrs --profile CDI-SSII_RMRP.shape CDI-SSII-RMRP-ringsig.pdf"
 "arcPlot.py --ct RMRP.ct --ringsig DMS-SSII-RMRP.corrs --profile DMS-SSII_RMRP.shape DMS-SSII-RMRP-ringsig.pdf"
-"arcPlot.py --ct RMRP.ct --pairmap NAI-SSII-RMRP-pairmap.txt --profile NAI-SSII_RMRP.shape NAI-SSII-RMRP-pairmap.pdf"
 "arcPlot.py --ct RMRP.ct --pairmap 2API-SSII-RMRP-pairmap.txt --profile 2API-SSII_RMRP.shape 2API-SSII-RMRP-pairmap.pdf"
-"arcPlot.py --ct RMRP.ct --pairmap CDI-SSII-RMRP-pairmap.txt --profile CDI-SSII_RMRP.shape CDI-SSII-RMRP-pairmap.pdf"
 "arcPlot.py --ct RMRP.ct --pairmap DMS-SSII-RMRP-pairmap.txt --profile DMS-SSII_RMRP.shape DMS-SSII-RMRP-pairmap.pdf"
-"arcPlot.py --ct RMRP.ct --ringsig NAI-MRT-RMRP.corrs --profile NAI-MRT_RMRP.shape NAI-MRT-RMRP-ringsig.pdf"
-"arcPlot.py --ct RMRP.ct --ringsig 2API-MRT-RMRP.corrs --profile 2API-MRT_RMRP.shape 2API-MRT-RMRP-ringsig.pdf"
-"arcPlot.py --ct RMRP.ct --ringsig CDI-MRT-RMRP.corrs --profile CDI-MRT_RMRP.shape CDI-MRT-RMRP-ringsig.pdf"
-"arcPlot.py --ct RMRP.ct --ringsig DMS-MRT-RMRP.corrs --profile DMS-MRT_RMRP.shape DMS-MRT-RMRP-ringsig.pdf"
-"arcPlot.py --ct RMRP.ct --pairmap NAI-MRT-RMRP-pairmap.txt --profile NAI-MRT_RMRP.shape NAI-MRT-RMRP-pairmap.pdf"
-"arcPlot.py --ct RMRP.ct --pairmap 2API-MRT-RMRP-pairmap.txt --profile 2API-MRT_RMRP.shape 2API-MRT-RMRP-pairmap.pdf"
-"arcPlot.py --ct RMRP.ct --pairmap CDI-MRT-RMRP-pairmap.txt --profile CDI-MRT_RMRP.shape CDI-MRT-RMRP-pairmap.pdf"
-"arcPlot.py --ct RMRP.ct --pairmap DMS-MRT-RMRP-pairmap.txt --profile DMS-MRT_RMRP.shape DMS-MRT-RMRP-pairmap.pdf"
 )
+
 eval ${tasks[$SLURM_ARRAY_TASK_ID]}
 
-sacct -j $SLURM_JOB_ID --format='JobID, user, priority, submit, start, elapsed, cputime, totalCPU, ncpus, NTasks, ExitCode'
+# Adds a table of SLURM jobs stats: pending time, job time, CPU and memory usage. This will be at the end of the SBATCH output file.
+sacct -j $SLURM_JOB_ID --format='JobID, submit, start, elapsed, cputime, MaxRSS'
 
 # usage: arcPlot.py [-h] [--ct CT] [--fasta FASTA] [--refct REFCT]
 #                   [--probability PROBABILITY] [--ringz RINGZ]
