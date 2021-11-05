@@ -17,7 +17,7 @@ def sbatch(command, params, dep=None):
         params["kill-on-invalid-dep"] = "yes"
     sb_prefix = "sbatch"
     sb_command = f"--wrap='source activate py2-MaP; {command}'"
-    sb_params = " ".join([f"--{kw}={params[kw]}" for kw in params.keys()])
+    sb_params = " ".join([f"--{k}={v}" for k, v in params.items()])
     process = f"{sb_prefix} {sb_params} {sb_command}"
     print(f"{process}\n")
     sbatch_response = subprocess.getoutput(process)
@@ -34,15 +34,19 @@ def shapemapper(s, m, u, fa, input_type="folders", dep=None):
     input_types = ["folders", "flashed", "deduped"]
     valid_input_type = (input_type in input_types)
     assert valid_input_type, f"input_type not in accepted list: {input_types}"
-    for i, sample in enumerate([m, u]):
-        command += ["--modified ", "--untreated "][i]
-        if input_type == "folders":
-            command += f"--folders Sample_{sample} "
-        elif input_type == "flashed":
-            command += f"--U Sample_{sample}/out.extendedFrags.fastq "
-        elif input_type == "deduped":
-            command += f"--U Sample_{sample}/combined_trimmed_deduped.fastq "
-    command += "--amplicon --output-parsed-mutations --per-read-histograms --overwrite"
+    if input_type == "folders":
+        command += f"--modified --folders Sample_{m} "
+        command += f"--untreated --folders Sample_{u} "
+    elif input_type == "flashed":
+        command += f"--modified --U Sample_{m}/out.extendedFrags.fastq "
+        command += f"--untreated --U Sample_{u}/out.extendedFrags.fastq "
+    elif input_type == "deduped":
+        command += f"--modified --U Sample_{m}/combined_trimmed_deduped.fastq "
+        command += f"--untreated --U Sample_{u}/out.extendedFrags.fastq "
+    command += "--amplicon "
+    command += "--output-parsed-mutations "
+    command += "--per-read-histograms "
+    command += "--overwrite"
     params = {"mem": "4g",
               "time": "10:00:00",
               "job-name": "shapemapper",
