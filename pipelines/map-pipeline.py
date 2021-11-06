@@ -27,9 +27,9 @@ def sbatch(command, params, dep=None):
     return job_id
 
 
-def shapemapper(s, m, u, fa, input_type="folders", dep=None):
+def shapemapper(s, m, u, fas, input_type="folders", dep=None):
     command = "~/shapemapper-2.1.5/shapemapper "
-    command += f"--target {fa} "
+    command += f"--target {" ".join(fas)}"
     command += f"--name {s} "
     input_types = ["folders", "flashed", "deduped"]
     valid_input_type = (input_type in input_types)
@@ -152,7 +152,8 @@ def parse_args():
     prs.add_argument("s", type=str, help="Name for outputs")
     prs.add_argument("m", type=str, help="Sample # for fastqs")
     prs.add_argument("u", type=str, help="Sample # for fastqs")
-    prs.add_argument("fa", type=str, help="location of fasta file")
+    prs.add_argument("--fas", type=str, nargs='+',
+                     help="location of fasta file")
     prs.add_argument("--ct", type=str, help="location of ct file")
     prs.add_argument("--dms", action="store_true", help="Is this DMS?")
     prs.add_argument("--input", type=str, help="folders, flashed, or deduped")
@@ -160,22 +161,23 @@ def parse_args():
     return args
 
 
-def main(s, m, u, fa, input="folders", ct=None, dms=False):
+def main(s, m, u, fas, input="folders", ct=None, dms=False):
     for dir in ["sbatch_out", f"sbatch_out/{s}", smo, rmo, pmo, apo, dmo, fco]:
         try:
             os.mkdir(dir)
         except FileExistsError:
             pass
-    t = fa[:-3]
-    smid = shapemapper(s, m, u, fa, input)
-    rmid = ringmapper(s, fa, t, smid)
-    _ = arcplot(s, t, ct, "rings", dms, rmid)
-    pmid = pairmapper(s, t, dms, smid)
-    _ = arcplot(s, t, ct, "pairs", dms, pmid)
-    _ = arcplot(s, t, ct, "allcorrs", dms, pmid)
-    dmid = dancemapper_sub1M_fit(s, t, smid)
-    dm2id = dancemapper_read_rings_pairs(s, t, dms, dmid)
-    foldclusters(s, t, dms, dm2id)
+    smid = shapemapper(s, m, u, fas, input)
+    for fa in fas:
+        t = fa[:-3]
+        rmid = ringmapper(s, fa, t, smid)
+        _ = arcplot(s, t, ct, "rings", dms, rmid)
+        pmid = pairmapper(s, t, dms, smid)
+        _ = arcplot(s, t, ct, "pairs", dms, pmid)
+        _ = arcplot(s, t, ct, "allcorrs", dms, pmid)
+        dmid = dancemapper_sub1M_fit(s, t, smid)
+        dm2id = dancemapper_read_rings_pairs(s, t, dms, dmid)
+        foldclusters(s, t, dms, dm2id)
 
 
 if __name__ == "__main__":
