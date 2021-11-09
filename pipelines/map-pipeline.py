@@ -129,7 +129,7 @@ def dancemapper_read_rings_pairs(s, t, dms=True, dep=None):
     command += f"--ring --pairmap"
     params = {"job-name": f"dancemapper_{s}",
               "output": f"sbatch_out/{s}/dm_corrs_%A.out",
-              "time": "1-00:00:00",
+              "time": "3-00:00:00",
               "mem": "30g"}
     return sbatch(command, params, dep)
 
