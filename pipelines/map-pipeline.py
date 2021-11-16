@@ -29,7 +29,7 @@ def sbatch(command, params, dep=None):
 
 def shapemapper(s, m, u, fas, input_type="folders", dep=None):
     command = "~/shapemapper-2.1.5/shapemapper "
-    command += f"--target {' '.join(fas)}"
+    command += f"--target {' '.join(fas)} "
     command += f"--name {s} "
     input_types = ["folders", "flashed", "deduped"]
     valid_input_type = (input_type in input_types)
@@ -123,6 +123,7 @@ def dancemapper_read_rings_pairs(s, t, dms=True, dep=None):
     command += f"--profile {smo}/{s}_{t}_profile.txt "
     command += f"--modified_parsed {smo}/{s}_Modified_{t}_parsed.mut "
     command += f"--untreated_parsed {smo}/{s}_Untreated_{t}_parsed.mut "
+    command += f"--outputprefix {dmo}/{s}_{t} "
     if not dms:
         command += "--notDMS "
     command += f"--readfromfile {dmo}/{s}_{t}.bm "
@@ -154,30 +155,44 @@ def parse_args():
     prs.add_argument("u", type=str, help="Sample # for fastqs")
     prs.add_argument("--fas", type=str, nargs='+',
                      help="location of fasta file")
-    prs.add_argument("--cts", type=str, nargs='+', help="location of ct files")
+    prs.add_argument("--cts", type=str, nargs='+', help="location of ct file")
     prs.add_argument("--dms", action="store_true", help="Is this DMS?")
     prs.add_argument("--input", type=str, help="folders, flashed, or deduped")
+    prs.add_argument("--steps", type=int, nargs="+", help=("steps to perform"
+                                                           "1=Shapemapper, "
+                                                           "2=RingMapper, "
+                                                           "3=PairMapper, "
+                                                           "4=Dance-fit, "
+                                                           "5=Dance-corrs, "
+                                                           "6=foldClusters"))
     args = prs.parse_args()
     return args
 
 
-def main(s, m, u, fas, input="folders", ct=None, dms=False):
+def main(s, m, u, fas, input="folders", cts=None, dms=False, steps=[1,2,3,4,5,6]):
     for dir in ["sbatch_out", f"sbatch_out/{s}", smo, rmo, pmo, apo, dmo, fco]:
         try:
             os.mkdir(dir)
         except FileExistsError:
             pass
-    smid = shapemapper(s, m, u, fas, input)
+    smid, rmid, pmid, dmid, dm2id = None, None, None, None, None
+    if 1 in steps:
+        smid = shapemapper(s, m, u, fas, input)
     for fa, ct in zip(fas, cts):
         t = fa[:-3]
-        rmid = ringmapper(s, fa, t, smid)
-        _ = arcplot(s, t, ct, "rings", dms, rmid)
-        pmid = pairmapper(s, t, dms, smid)
-        _ = arcplot(s, t, ct, "pairs", dms, pmid)
-        _ = arcplot(s, t, ct, "allcorrs", dms, pmid)
-        dmid = dancemapper_sub1M_fit(s, t, smid)
-        dm2id = dancemapper_read_rings_pairs(s, t, dms, dmid)
-        foldclusters(s, t, dms, dm2id)
+        if 2 in steps:
+            rmid = ringmapper(s, fa, t, smid)
+            _ = arcplot(s, t, ct, "rings", dms, rmid)
+        if 3 in steps:
+            pmid = pairmapper(s, t, dms, smid)
+            _ = arcplot(s, t, ct, "pairs", dms, pmid)
+            _ = arcplot(s, t, ct, "allcorrs", dms, pmid)
+        if 4 in steps:
+            dmid = dancemapper_sub1M_fit(s, t, smid)
+        if 5 in steps:
+            dm2id = dancemapper_read_rings_pairs(s, t, dms, dmid)
+        if 6 in steps:
+            foldclusters(s, t, dms, dm2id)
 
 
 if __name__ == "__main__":
