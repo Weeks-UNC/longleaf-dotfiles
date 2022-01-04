@@ -34,3 +34,7 @@ Copy the install-dotfiles.sh file from this repo, and run it.
 wget 'https://raw.githubusercontent.com/Weeks-UNC/longleaf-dotfiles/master/install/install-dotfiles.sh'
 source install-dotfiles.sh
 ```
+
+TODO:
+--------------------------------------------------------------------------------
+- [ ] pipeline: put sample name in job name for easy reference
