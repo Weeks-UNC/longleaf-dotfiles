@@ -63,7 +63,7 @@ def ringmapper(s, fa, t, dep=None):
     command += f"{smo}/{s}_Modified_{t}_parsed.mut "
     command += f"{rmo}/{s}_{t}_rings.txt"
     params = {"mem": "4g",
-              "time": "1:00:00",
+              "time": "3:00:00",
               "job-name": f"ringmapper-{s}",
               "output": f"sbatch_out/{s}/rm_%A.out"}
     return sbatch(command, params, dep)
@@ -80,7 +80,7 @@ def pairmapper(s, t, dms=True, dep=None):
     params = {"job-name": f"pairmapper-{s}",
               "output": f"sbatch_out/{s}/pm_%A.out",
               "mem": "4g",
-              "time": "1:00:00"}
+              "time": "3:00:00"}
     return sbatch(command, params, dep)
 
 
@@ -88,17 +88,17 @@ def arcplot(s, t, ct, data, dms=True, dep=None):
     command = "arcPlot.py "
     command += f"--ct {ct} "
     if dms:
-        command += f"--dmsprofile {smo}/{s}_{t}.shape"
+        command += f"--dmsprofile {smo}/{s}_{t}.shape "
     else:
         command += f"--profile {smo}/{s}_{t}.shape "
     if data == "rings":
         command += f"--ringsig {rmo}/{s}_{t}_rings.txt "
         command += f"{apo}/{s}_{t}_rings.pdf"
     if data == "pairs":
-        command += f"--pairmap {pmo}/{s}_{t}_pairmap.txt,all "
+        command += f"--pairmap {pmo}/{s}_{t}-pairmap.txt,all "
         command += f"{apo}/{s}_{t}_pairmap.pdf"
     elif data == "allcorrs":
-        command += f"--ringsig {pmo}/{s}_{t}_allcorrs.txt"
+        command += f"--ringsig {pmo}/{s}_{t}-allcorrs.txt "
         command += f"{apo}/{s}_{t}_allcorrs.pdf"
     params = {"job-name": f"arcplot-{s}-{data}",
               "output": f"sbatch_out/{s}/ap_{data}_%A.out"}
@@ -158,13 +158,9 @@ def parse_args():
     prs.add_argument("--cts", type=str, nargs='+', help="location of ct file")
     prs.add_argument("--dms", action="store_true", help="Is this DMS?")
     prs.add_argument("--input", type=str, help="folders, flashed, or deduped")
-    prs.add_argument("--steps", type=int, nargs="+", help=("steps to perform"
-                                                           "1=Shapemapper, "
-                                                           "2=RingMapper, "
-                                                           "3=PairMapper, "
-                                                           "4=Dance-fit, "
-                                                           "5=Dance-corrs, "
-                                                           "6=foldClusters"))
+    prs.add_argument("--steps", type=int, nargs="+", default=[1, 2, 3, 4, 5, 6],
+                     help=("1=Shapemapper, 2=RingMapper, 3=PairMapper, "
+                           "4=Dance-fit, 5=Dance-corrs, 6=foldClusters"))
     args = prs.parse_args()
     return args
 
