@@ -168,7 +168,7 @@ def parse_args():
     return args
 
 
-def main(s, m, u, fas, input="folders", cts=None, dms=False, amplicon=False
+def main(s, m, u, fas, input="folders", cts=None, dms=False, amplicon=False,
          steps=[1, 2, 3, 4, 5, 6]):
     for dir in ["sbatch_out", f"sbatch_out/{s}", smo, rmo, pmo, apo, dmo, fco]:
         try:
