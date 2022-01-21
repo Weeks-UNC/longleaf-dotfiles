@@ -27,7 +27,7 @@ def sbatch(command, params, dep=None):
     return job_id
 
 
-def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=True):
+def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False):
     command = "~/shapemapper-2.1.5/shapemapper "
     command += f"--target {' '.join(fas)} "
     command += f"--name {s} "
