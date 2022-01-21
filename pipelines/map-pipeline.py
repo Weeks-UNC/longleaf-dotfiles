@@ -35,8 +35,8 @@ def shapemapper(s, m, u, fas, input_type="folders", dep=None):
     valid_input_type = (input_type in input_types)
     assert valid_input_type, f"input_type not in accepted list: {input_types}"
     if input_type == "folders":
-        command += f"--modified --folders Sample_{m} "
-        command += f"--untreated --folders Sample_{u} "
+        command += f"--modified --folder Sample_{m} "
+        command += f"--untreated --folder Sample_{u} "
     elif input_type == "flashed":
         command += f"--modified --U Sample_{m}/out.extendedFrags.fastq "
         command += f"--untreated --U Sample_{u}/out.extendedFrags.fastq "
@@ -165,7 +165,7 @@ def parse_args():
     return args
 
 
-def main(s, m, u, fas, input="folders", cts=None, dms=False, steps=[1,2,3,4,5,6]):
+def main(s, m, u, fas, input="folders", cts=None, dms=False, steps=[1, 2, 3, 4, 5, 6]):
     for dir in ["sbatch_out", f"sbatch_out/{s}", smo, rmo, pmo, apo, dmo, fco]:
         try:
             os.mkdir(dir)

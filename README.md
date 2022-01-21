@@ -38,3 +38,4 @@ source install-dotfiles.sh
 TODO:
 --------------------------------------------------------------------------------
 - [ ] pipeline: put sample name in job name for easy reference
+- [ ] pipeline: create bash script wrapper to copy into 
