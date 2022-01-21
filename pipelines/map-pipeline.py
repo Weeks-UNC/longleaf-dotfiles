@@ -27,7 +27,7 @@ def sbatch(command, params, dep=None):
     return job_id
 
 
-def shapemapper(s, m, u, fas, input_type="folders", dep=None):
+def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=True):
     command = "~/shapemapper-2.1.5/shapemapper "
     command += f"--target {' '.join(fas)} "
     command += f"--name {s} "
@@ -43,7 +43,8 @@ def shapemapper(s, m, u, fas, input_type="folders", dep=None):
     elif input_type == "deduped":
         command += f"--modified --U Sample_{m}/combined_trimmed_deduped.fastq "
         command += f"--untreated --U Sample_{u}/out.extendedFrags.fastq "
-    command += "--amplicon "
+    if amplicon:
+        command += "--amplicon "
     command += "--output-parsed-mutations "
     command += "--per-read-histograms "
     command += "--overwrite"
@@ -161,11 +162,14 @@ def parse_args():
     prs.add_argument("--steps", type=int, nargs="+", default=[1, 2, 3, 4, 5, 6],
                      help=("1=Shapemapper, 2=RingMapper, 3=PairMapper, "
                            "4=Dance-fit, 5=Dance-corrs, 6=foldClusters"))
+    prs.add_argument("--amplicon", action="store_true", default="False",
+                     help="use amplicon flag with Shapemapper2")
     args = prs.parse_args()
     return args
 
 
-def main(s, m, u, fas, input="folders", cts=None, dms=False, steps=[1, 2, 3, 4, 5, 6]):
+def main(s, m, u, fas, input="folders", cts=None, dms=False, amplicon=False
+         steps=[1, 2, 3, 4, 5, 6]):
     for dir in ["sbatch_out", f"sbatch_out/{s}", smo, rmo, pmo, apo, dmo, fco]:
         try:
             os.mkdir(dir)
@@ -173,7 +177,7 @@ def main(s, m, u, fas, input="folders", cts=None, dms=False, steps=[1, 2, 3, 4, 
             pass
     smid, rmid, pmid, dmid, dm2id = None, None, None, None, None
     if 1 in steps:
-        smid = shapemapper(s, m, u, fas, input)
+        smid = shapemapper(s, m, u, fas, input, None, amplicon)
     for fa, ct in zip(fas, cts):
         t = fa[:-3]
         if 2 in steps:
