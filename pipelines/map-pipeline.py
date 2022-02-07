@@ -45,6 +45,8 @@ def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False):
         command += f"--untreated --U Sample_{u}/out.extendedFrags.fastq "
     if amplicon:
         command += "--amplicon "
+    else:
+        command += "--random-primer-len 9 "
     command += "--output-parsed-mutations "
     command += "--per-read-histograms "
     command += "--overwrite"
