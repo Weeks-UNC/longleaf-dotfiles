@@ -26,9 +26,13 @@ def sbatch(command, params, dep=None):
     job_id = sbatch_response.split(' ')[-1].strip()
     return job_id
 
+def stringify_params(params):
+    return " ".join([f"--{k} {v}".strip() for k, v in params.items])
 
-def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False):
+def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False,
+                sm_params={}):
     command = "~/shapemapper-2.1.5/shapemapper "
+    command += f"{stringify_params(sm_params)} "
     command += f"--target {' '.join(fas)} "
     command += f"--name {s} "
     input_types = ["folders", "flashed", "deduped"]
@@ -59,8 +63,9 @@ def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False):
     return sbatch(command, params, dep)
 
 
-def ringmapper(s, fa, t, dep=None):
+def ringmapper(s, fa, t, dep=None, rm_params={}):
     command = f"~/RingMapper/ringmapper.py "
+    command += f"{stringify_params(rm_params)} "
     command += f"--fasta {fa} "
     command += f"--untreated {smo}/{s}_Untreated_{t}_parsed.mut "
     command += f"{smo}/{s}_Modified_{t}_parsed.mut "
@@ -72,8 +77,9 @@ def ringmapper(s, fa, t, dep=None):
     return sbatch(command, params, dep)
 
 
-def pairmapper(s, t, dms=True, dep=None):
+def pairmapper(s, t, dms=True, dep=None, pm_params={}):
     command = "pairmapper.py "
+    command += f"{stringify_params(pm_params)} "
     command += f"--profile {smo}/{s}_{t}_profile.txt "
     command += f"--untreated_parsed {smo}/{s}_Untreated_{t}_parsed.mut "
     command += f"--modified_parsed {smo}/{s}_Modified_{t}_parsed.mut "
@@ -108,8 +114,9 @@ def arcplot(s, t, ct, data, dms=True, dep=None):
     return sbatch(command, params, dep)
 
 
-def dancemapper_sub1M_fit(s, t, dep=None):
+def dancemapper_sub1M_fit(s, t, dep=None, dm1_params={}):
     command = "python ~/DanceMapper/DanceMapper.py "
+    command += f"{stringify_params(dm1_params)} "
     command += f"--profile {smo}/{s}_{t}_profile.txt "
     command += f"--modified_parsed {smo}/{s}_Modified_{t}_parsed.mut "
     command += f"--undersample 1000000 --fit --maxcomponents 3 "
@@ -121,8 +128,9 @@ def dancemapper_sub1M_fit(s, t, dep=None):
     return sbatch(command, params, dep)
 
 
-def dancemapper_read_rings_pairs(s, t, dms=True, dep=None):
+def dancemapper_read_rings_pairs(s, t, dms=True, dep=None, dm2_params={}):
     command = "python ~/DanceMapper/DanceMapper.py "
+    command += f"{stringify_params(dm2_params)} "
     command += f"--profile {smo}/{s}_{t}_profile.txt "
     command += f"--modified_parsed {smo}/{s}_Modified_{t}_parsed.mut "
     command += f"--untreated_parsed {smo}/{s}_Untreated_{t}_parsed.mut "
@@ -138,8 +146,9 @@ def dancemapper_read_rings_pairs(s, t, dms=True, dep=None):
     return sbatch(command, params, dep)
 
 
-def foldclusters(s, t, dms=True, dep=None):
+def foldclusters(s, t, dms=True, dep=None, fc_params={}):
     command = "python ~/DanceMapper/foldClusters.py "
+    command += f"{stringify_params(fc_params)} "
     command += f"--bp {dmo}/{s}_{t} "
     command += f"--prob --pk "
     if not dms:
@@ -164,14 +173,27 @@ def parse_args():
     prs.add_argument("--steps", type=int, nargs="+", default=[1, 2, 3, 4, 5, 6],
                      help=("1=Shapemapper, 2=RingMapper, 3=PairMapper, "
                            "4=Dance-fit, 5=Dance-corrs, 6=foldClusters"))
-    prs.add_argument("--amplicon", action="store_true", default="False",
+    prs.add_argument("--amplicon", action="store_true", default=False,
                      help="use amplicon flag with Shapemapper2")
+    prs.add_argument("--sm_params", type=dict,
+                     help="custom parameters for Shapemapper")
+    prs.add_argument("--rm_params", type=dict,
+                     help="custom parameters for Ringmapper")
+    prs.add_argument("--pm_params", type=dict,
+                     help="custom parameters for Pairmapper")
+    prs.add_argument("--dm1_params", type=dict,
+                     help="custom parameters for Dancemapper1")
+    prs.add_argument("--dm2_params", type=dict,
+                     help="custom parameters for Dancemapper2")
+    prs.add_argument("--fc_params", type=dict,
+                     help="custom parameters for FoldClusters")
     args = prs.parse_args()
     return args
 
 
 def main(s, m, u, fas, input="folders", cts=None, dms=False, amplicon=False,
-         steps=[1, 2, 3, 4, 5, 6]):
+         steps=[1, 2, 3, 4, 5, 6], sm_params={}, rm_params={}, pm_params={},
+         dm1_params={}, dm2_params={}, fc_params={}):
     for dir in ["sbatch_out", f"sbatch_out/{s}", smo, rmo, pmo, apo, dmo, fco]:
         try:
             os.mkdir(dir)
@@ -179,22 +201,22 @@ def main(s, m, u, fas, input="folders", cts=None, dms=False, amplicon=False,
             pass
     smid, rmid, pmid, dmid, dm2id = None, None, None, None, None
     if 1 in steps:
-        smid = shapemapper(s, m, u, fas, input, None, amplicon)
+        smid = shapemapper(s, m, u, fas, input, None, amplicon, sm_params)
     for fa, ct in zip(fas, cts):
         t = fa[:-3]
         if 2 in steps:
-            rmid = ringmapper(s, fa, t, smid)
+            rmid = ringmapper(s, fa, t, smid, rm_params)
             _ = arcplot(s, t, ct, "rings", dms, rmid)
         if 3 in steps:
-            pmid = pairmapper(s, t, dms, smid)
+            pmid = pairmapper(s, t, dms, smid, pm_params)
             _ = arcplot(s, t, ct, "pairs", dms, pmid)
             _ = arcplot(s, t, ct, "allcorrs", dms, pmid)
         if 4 in steps:
-            dmid = dancemapper_sub1M_fit(s, t, smid)
+            dmid = dancemapper_sub1M_fit(s, t, smid, dm1_params)
         if 5 in steps:
-            dm2id = dancemapper_read_rings_pairs(s, t, dms, dmid)
+            dm2id = dancemapper_read_rings_pairs(s, t, dms, dmid, dm2_params)
         if 6 in steps:
-            foldclusters(s, t, dms, dm2id)
+            foldclusters(s, t, dms, dm2id, fc_params)
 
 
 if __name__ == "__main__":
