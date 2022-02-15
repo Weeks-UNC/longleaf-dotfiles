@@ -175,19 +175,23 @@ def parse_args():
                            "4=Dance-fit, 5=Dance-corrs, 6=foldClusters"))
     prs.add_argument("--amplicon", action="store_true", default=False,
                      help="use amplicon flag with Shapemapper2")
-    prs.add_argument("--sm_params", type=dict,
+    prs.add_argument("--sm_params", type=str, nargs="+",
                      help="custom parameters for Shapemapper")
-    prs.add_argument("--rm_params", type=dict,
+    prs.add_argument("--rm_params", type=str, nargs="+",
                      help="custom parameters for Ringmapper")
-    prs.add_argument("--pm_params", type=dict,
+    prs.add_argument("--pm_params", type=str, nargs="+",
                      help="custom parameters for Pairmapper")
-    prs.add_argument("--dm1_params", type=dict,
+    prs.add_argument("--dm1_params", type=str, nargs="+",
                      help="custom parameters for Dancemapper1")
-    prs.add_argument("--dm2_params", type=dict,
+    prs.add_argument("--dm2_params", type=str, nargs="+",
                      help="custom parameters for Dancemapper2")
-    prs.add_argument("--fc_params", type=dict,
+    prs.add_argument("--fc_params", type=str, nargs="+",
                      help="custom parameters for FoldClusters")
     args = prs.parse_args()
+    for arg in ["sm", "rm", "pm", "dm1", "dm2", "fc"]:
+        params = args[f"{arg}_params"]
+        k_v_pairs = [pair.split("=") for pair in params]
+        args[f"{arg}_params"] = {k:v for k, v in k_v_pairs}
     return args
 
 
