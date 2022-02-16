@@ -26,8 +26,10 @@ def sbatch(command, params, dep=None):
     job_id = sbatch_response.split(' ')[-1].strip()
     return job_id
 
+
 def stringify_params(params):
     return " ".join([f"--{k} {v}".strip() for k, v in params.items])
+
 
 def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False,
                 sm_params={}):
@@ -189,9 +191,9 @@ def parse_args():
                      help="custom parameters for FoldClusters")
     args = prs.parse_args()
     for arg in ["sm", "rm", "pm", "dm1", "dm2", "fc"]:
-        params = args[f"{arg}_params"]
+        params = getattr(args, [f"{arg}_params"])
         k_v_pairs = [pair.split("=") for pair in params]
-        args[f"{arg}_params"] = {k:v for k, v in k_v_pairs}
+        setattr(args, f"{arg}_params", {k: v for k, v in k_v_pairs})
     return args
 
 
