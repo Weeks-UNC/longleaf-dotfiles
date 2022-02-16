@@ -191,7 +191,7 @@ def parse_args():
                      help="custom parameters for FoldClusters")
     args = prs.parse_args()
     for arg in ["sm", "rm", "pm", "dm1", "dm2", "fc"]:
-        params = getattr(args, [f"{arg}_params"])
+        params = getattr(args, f"{arg}_params")
         k_v_pairs = [pair.split("=") for pair in params]
         setattr(args, f"{arg}_params", {k: v for k, v in k_v_pairs})
     return args
