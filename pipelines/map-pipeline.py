@@ -28,7 +28,7 @@ def sbatch(command, params, dep=None):
 
 
 def stringify_params(params):
-    return " ".join([f"--{k} {v}".strip() for k, v in params.items])
+    return " ".join([f"--{k} {params[k]}".strip() for k in params])
 
 
 def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False,
@@ -191,10 +191,13 @@ def parse_args():
                      help="custom parameters for FoldClusters")
     args = prs.parse_args()
     for arg in ["sm", "rm", "pm", "dm1", "dm2", "fc"]:
-        if hasattr(args, f"{arg}_params"):
-            params = getattr(args, f"{arg}_params")
-            k_v_pairs = [pair.split("=") for pair in params]
-            setattr(args, f"{arg}_params", {k: v for k, v in k_v_pairs})
+        arg = f"{arg}_params"
+        if getattr(args, arg) is not None:
+            params = getattr(args, arg)
+            k_v_pairs = [pair.split(":") for pair in params]
+            setattr(args, arg, {k: v for k, v in k_v_pairs})
+        else:
+            setattr(args, arg, {})
     return args
 
 
