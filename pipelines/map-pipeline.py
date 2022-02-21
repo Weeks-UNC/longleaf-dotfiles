@@ -75,7 +75,7 @@ def ringmapper(s, fa, t, dep=None, rm_params={}):
     params = {"mem": "4g",
               "time": "3:00:00",
               "job-name": f"ringmapper-{s}",
-              "output": f"sbatch_out/{s}/rm_%A.out"}
+              "output": f"sbatch_out/{s}/{t}/rm_%A.out"}
     return sbatch(command, params, dep)
 
 
@@ -89,7 +89,7 @@ def pairmapper(s, t, dms=True, dep=None, pm_params={}):
     if not dms:
         command += "--notDMS"
     params = {"job-name": f"pairmapper-{s}",
-              "output": f"sbatch_out/{s}/pm_%A.out",
+              "output": f"sbatch_out/{s}/{t}/pm_%A.out",
               "mem": "4g",
               "time": "3:00:00"}
     return sbatch(command, params, dep)
@@ -112,7 +112,7 @@ def arcplot(s, t, ct, data, dms=True, dep=None):
         command += f"--ringsig {pmo}/{s}_{t}-allcorrs.txt "
         command += f"{apo}/{s}_{t}_allcorrs.pdf"
     params = {"job-name": f"arcplot-{s}-{data}",
-              "output": f"sbatch_out/{s}/ap_{data}_%A.out"}
+              "output": f"sbatch_out/{s}/{t}/ap_{data}_%A.out"}
     return sbatch(command, params, dep)
 
 
@@ -124,7 +124,7 @@ def dancemapper_sub1M_fit(s, t, dep=None, dm1_params={}):
     command += f"--undersample 1000000 --fit --maxcomponents 3 "
     command += f"--outputprefix {dmo}/{s}_{t}"
     params = {"job-name": "dancemapper",
-              "output": f"sbatch_out/{s}/dm_fit_%A.out",
+              "output": f"sbatch_out/{s}/{t}/dm_fit_%A.out",
               "time": "7-00:00:00",
               "mem": "10g"}
     return sbatch(command, params, dep)
@@ -142,7 +142,7 @@ def dancemapper_read_rings_pairs(s, t, dms=True, dep=None, dm2_params={}):
     command += f"--readfromfile {dmo}/{s}_{t}.bm "
     command += f"--ring --pairmap"
     params = {"job-name": f"dancemapper_{s}",
-              "output": f"sbatch_out/{s}/dm_corrs_%A.out",
+              "output": f"sbatch_out/{s}/{t}/dm_corrs_%A.out",
               "time": "3-00:00:00",
               "mem": "30g"}
     return sbatch(command, params, dep)
@@ -157,7 +157,7 @@ def foldclusters(s, t, dms=True, dep=None, fc_params={}):
         command += f"--notDMS "
     command += f"{dmo}/{s}_{t}-reactivities.txt {fco}/{s}-{t}"
     params = {"job-name": f"foldclusters_{s}",
-              "output": f"sbatch_out/{s}/fc_%A.out",
+              "output": f"sbatch_out/{s}/{t}/fc_%A.out",
               "time": "1:00:00"}
     return sbatch(command, params, dep)
 
