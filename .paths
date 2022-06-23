@@ -1,0 +1,26 @@
+# .paths
+
+# paths to longleaf installations
+proj="/proj/kweeks/bin"
+
+PATH="$PATH:$proj/RingMapper/"
+PATH="$PATH:$proj/shapemapper-2.1.5/"
+PATH="$PATH:$proj/DanceMapper/"
+PATH="$PATH:$proj/RNAstructure/exe/"
+PATH="$PATH:$proj/arcPlot/"
+PATH="$PATH:$proj/RNATools/"
+PATH="$PATH:$proj/StarMapper/"
+PATH="$PATH:$proj/RNAstructure/exe/"
+
+DATAPATH="$proj/RNAstructure/data_tables/"
+
+PYTHONPATH="$PYTHONPATH:$proj/RingMapper"
+PYTHONPATH="$PYTHONPATH:$proj/DanceMapper"
+PYTHONPATH="$PYTHONPATH:$proj/arcPlot"
+PYTHONPATH="$PYTHONPATH:$proj/RNATools"
+PYTHONPATH="$PYTHONPATH:$proj/StarMapper"
+PYTHONPATH="$PYTHONPATH:$proj/Superfold"
+
+export DATAPATH
+export PATH
+export PYTHONPATH
