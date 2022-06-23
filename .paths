@@ -3,22 +3,28 @@
 # paths to longleaf installations
 proj="/proj/kweeks/bin"
 
-PATH="$PATH:$proj/RingMapper/"
-PATH="$PATH:$proj/shapemapper-2.1.5/"
-PATH="$PATH:$proj/DanceMapper/"
 PATH="$PATH:$proj/RNAstructure/exe/"
-PATH="$PATH:$proj/arcPlot/"
-PATH="$PATH:$proj/RNATools/"
-PATH="$PATH:$proj/StarMapper/"
-PATH="$PATH:$proj/RNAstructure/exe/"
-
 DATAPATH="$proj/RNAstructure/data_tables/"
 
-PYTHONPATH="$PYTHONPATH:$proj/RingMapper"
+PATH="$PATH:$proj/DanceMapper/"
 PYTHONPATH="$PYTHONPATH:$proj/DanceMapper"
+
+PATH="$PATH:$proj/shapemapper-2.1.5/"
+PYTHONPATH="$PYTHONPATH:$proj/shapemapper-2.1.5/"
+
+PATH="$PATH:$proj/RingMapper/"
+PYTHONPATH="$PYTHONPATH:$proj/RingMapper"
+
+PATH="$PATH:$proj/arcPlot/"
 PYTHONPATH="$PYTHONPATH:$proj/arcPlot"
+
+PATH="$PATH:$proj/RNATools/"
 PYTHONPATH="$PYTHONPATH:$proj/RNATools"
-PYTHONPATH="$PYTHONPATH:$proj/StarMapper"
+
+PATH="$PATH:$proj/RNAvigate/"
+PYTHONPATH="$PYTHONPATH:$proj/RNAvigate"
+
+PATH="$PATH:$proj/Superfold/"
 PYTHONPATH="$PYTHONPATH:$proj/Superfold"
 
 export DATAPATH
