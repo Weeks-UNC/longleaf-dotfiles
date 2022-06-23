@@ -11,7 +11,7 @@
 # for more details on module usage.
 
 #load all dot-files
-for file in ~/.{prompt,alias,functions,env,bash_$USER};
+for file in ./.{prompt,alias,functions,paths,env,bash_$USER};
   do [ -f "$file" ] && source "$file";
 done;
 unset file;
@@ -38,4 +38,3 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
