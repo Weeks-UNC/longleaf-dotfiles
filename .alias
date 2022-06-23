@@ -13,6 +13,7 @@ alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 alias aliases="alias | sed 's/=.*//'"
 alias functions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
 alias paths='echo -e ${PATH//:/\\n}'
+alias pythonpaths='echo -e ${PYTHONPATH//:/\\n}'
 
 # ==============================================================================
 # Directory listing/traversal
