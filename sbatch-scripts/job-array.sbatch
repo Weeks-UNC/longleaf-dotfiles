@@ -59,7 +59,7 @@ t='rnasep'
 fa='rnasep.fa'
 # ct file
 ct='RNaseP.ct'
-# directory with input files (usually shapemapper_out/
+# shapemapper output directory
 smo="shapemapper_out/"
 # ringmapper output directory
 rmo="ringmapper_out/"
@@ -80,15 +80,15 @@ shapemapper --target ${fa} \
             --overwrite
 
 ringmapper.py --fasta ${fa} \
-              --untreated ${sm}${s}_Untreated_${t}_parsed.mut \
+              --untreated ${smo}${s}_Untreated_${t}_parsed.mut \
               --undersample 1000000 \
               ${smo}${s}_Modified_${t}_parsed.mut \
               ${rmo}${s}-${t}.corrs
 
-pairmapper.py --profile ${sm}${s}_${t}_profile.txt \
-              --untreated_parsed ${sm}${s}_Untreated_${t}_parsed.mut \
-              --modified_parsed ${sm}${s}_Modified_${t}_parsed.mut \
-              --out ${pm}${s}-${t} \
+pairmapper.py --profile ${smo}${s}_${t}_profile.txt \
+              --untreated_parsed ${smo}${s}_Untreated_${t}_parsed.mut \
+              --modified_parsed ${smo}${s}_Modified_${t}_parsed.mut \
+              --out ${pmo}${s}-${t} \
               --override_qualcheck \
               --notDMS
 
