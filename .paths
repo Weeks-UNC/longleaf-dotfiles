@@ -7,25 +7,31 @@ PATH="$PATH:$proj/RNAstructure/exe/"
 DATAPATH="$proj/RNAstructure/data_tables/"
 
 PATH="$PATH:$proj/DanceMapper/"
-PYTHONPATH="$PYTHONPATH:$proj/DanceMapper"
+PYTHONPATH="$PYTHONPATH:$proj/DanceMapper/"
 
 PATH="$PATH:$proj/shapemapper-2.1.5/"
 PYTHONPATH="$PYTHONPATH:$proj/shapemapper-2.1.5/"
 
 PATH="$PATH:$proj/RingMapper/"
-PYTHONPATH="$PYTHONPATH:$proj/RingMapper"
+PYTHONPATH="$PYTHONPATH:$proj/RingMapper/"
 
 PATH="$PATH:$proj/arcPlot/"
-PYTHONPATH="$PYTHONPATH:$proj/arcPlot"
+PYTHONPATH="$PYTHONPATH:$proj/arcPlot/"
 
 PATH="$PATH:$proj/RNATools/"
-PYTHONPATH="$PYTHONPATH:$proj/RNATools"
+PYTHONPATH="$PYTHONPATH:$proj/RNATools/"
 
 PATH="$PATH:$proj/RNAvigate/"
-PYTHONPATH="$PYTHONPATH:$proj/RNAvigate"
+PYTHONPATH="$PYTHONPATH:$proj/RNAvigate/"
 
 PATH="$PATH:$proj/Superfold/"
-PYTHONPATH="$PYTHONPATH:$proj/Superfold"
+PYTHONPATH="$PYTHONPATH:$proj/Superfold/"
+
+PATH="$PATH:$proj/fj-txome/"
+PYTHONPATH="$PYTHONPATH:$proj/fj-txome/"
+
+PATH="$PATH:$proj/Longleaf-dotfiles/pipelines/"
+PYTHONPATH="$PYTHONPATH:$proj/Longleaf-dotfiles/pipelines/"
 
 export DATAPATH
 export PATH
