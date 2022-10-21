@@ -3,6 +3,7 @@ import subprocess
 import argparse
 import os
 
+exe_path = "/proj/kweeks/bin/"
 smo = "shapemapper_out"
 rmo = "ringmapper_out"
 pmo = "pairmapper_out"
@@ -33,7 +34,7 @@ def stringify_params(params):
 
 def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False,
                 sm_params={}):
-    command = "~/shapemapper-2.1.5/shapemapper "
+    command = exe_path+"shapemapper-2.1.5/shapemapper "
     command += f"{stringify_params(sm_params)} "
     command += f"--target {' '.join(fas)} "
     command += f"--name {s} "
@@ -66,7 +67,7 @@ def shapemapper(s, m, u, fas, input_type="folders", dep=None, amplicon=False,
 
 
 def ringmapper(s, fa, t, dep=None, rm_params={}):
-    command = f"~/RingMapper/ringmapper.py "
+    command = exe_path+"RingMapper/ringmapper.py "
     command += f"{stringify_params(rm_params)} "
     command += f"--fasta {fa} "
     command += f"--untreated {smo}/{s}_Untreated_{t}_parsed.mut "
@@ -80,7 +81,7 @@ def ringmapper(s, fa, t, dep=None, rm_params={}):
 
 
 def pairmapper(s, t, dms=True, dep=None, pm_params={}):
-    command = "pairmapper.py "
+    command = exe_path+"pairmapper.py "
     command += f"{stringify_params(pm_params)} "
     command += f"--profile {smo}/{s}_{t}_profile.txt "
     command += f"--untreated_parsed {smo}/{s}_Untreated_{t}_parsed.mut "
@@ -117,11 +118,11 @@ def arcplot(s, t, ct, data, dms=True, dep=None):
 
 
 def dancemapper_sub1M_fit(s, t, dep=None, dm1_params={}):
-    command = "python ~/DanceMapper/DanceMapper.py "
+    command = f"python {exe_path}DanceMapper/DanceMapper.py "
     command += f"{stringify_params(dm1_params)} "
     command += f"--profile {smo}/{s}_{t}_profile.txt "
     command += f"--modified_parsed {smo}/{s}_Modified_{t}_parsed.mut "
-    command += f"--undersample 1000000 --fit --maxcomponents 3 "
+    command += "--undersample 1000000 --fit --maxcomponents 3 "
     command += f"--outputprefix {dmo}/{s}_{t}"
     params = {"job-name": "dancemapper",
               "output": f"sbatch_out/{s}/{t}/dm_fit_%A.out",
@@ -131,7 +132,7 @@ def dancemapper_sub1M_fit(s, t, dep=None, dm1_params={}):
 
 
 def dancemapper_read_rings_pairs(s, t, dms=True, dep=None, dm2_params={}):
-    command = "python ~/DanceMapper/DanceMapper.py "
+    command = f"python {exe_path}DanceMapper/DanceMapper.py "
     command += f"{stringify_params(dm2_params)} "
     command += f"--profile {smo}/{s}_{t}_profile.txt "
     command += f"--modified_parsed {smo}/{s}_Modified_{t}_parsed.mut "
@@ -140,7 +141,7 @@ def dancemapper_read_rings_pairs(s, t, dms=True, dep=None, dm2_params={}):
     if not dms:
         command += "--notDMS "
     command += f"--readfromfile {dmo}/{s}_{t}.bm "
-    command += f"--ring --pairmap"
+    command += "--ring --pairmap"
     params = {"job-name": f"dancemapper_{s}",
               "output": f"sbatch_out/{s}/{t}/dm_corrs_%A.out",
               "time": "3-00:00:00",
@@ -149,12 +150,12 @@ def dancemapper_read_rings_pairs(s, t, dms=True, dep=None, dm2_params={}):
 
 
 def foldclusters(s, t, dms=True, dep=None, fc_params={}):
-    command = "python ~/DanceMapper/foldClusters.py "
+    command = f"python {exe_path}DanceMapper/foldClusters.py "
     command += f"{stringify_params(fc_params)} "
     command += f"--bp {dmo}/{s}_{t} "
-    command += f"--prob --pk "
+    command += "--prob --pk "
     if not dms:
-        command += f"--notDMS "
+        command += "--notDMS "
     command += f"{dmo}/{s}_{t}-reactivities.txt {fco}/{s}-{t}"
     params = {"job-name": f"foldclusters_{s}",
               "output": f"sbatch_out/{s}/{t}/fc_%A.out",
@@ -172,7 +173,8 @@ def parse_args():
     prs.add_argument("--cts", type=str, nargs='+', help="location of ct file")
     prs.add_argument("--dms", action="store_true", help="Is this DMS?")
     prs.add_argument("--input", type=str, help="folders, flashed, or deduped")
-    prs.add_argument("--steps", type=int, nargs="+", default=[1, 2, 3, 4, 5, 6],
+    prs.add_argument("--steps", type=int, nargs="+",
+                     default=[1, 2, 3, 4, 5, 6],
                      help=("1=Shapemapper, 2=RingMapper, 3=PairMapper, "
                            "4=Dance-fit, 5=Dance-corrs, 6=foldClusters"))
     prs.add_argument("--amplicon", action="store_true", default=False,
