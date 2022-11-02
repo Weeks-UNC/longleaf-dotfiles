@@ -6,7 +6,11 @@ What is it?
 --------------------------------------------------------------------------------
 This repository is for anything that simplifies Longleaf set-up. It contains:
 - convenient aliases, functions, and environment variables
+- An anaconda environment that will work with all of our MaP software.
 - installation scripts and template SLURM submission scripts for common software
+- A pipeline which submits Shapemapper, Ringmapper, Pairmapper, arcPlot,
+  Dancemapper, and foldClusters in parallel as seperate SLURM jobs.
+- A script to deduplicate samples prior to running the MaP pipeline.
 
 Before starting:
 --------------------------------------------------------------------------------
@@ -16,26 +20,47 @@ You will need access to Longleaf:
 
 Setting Up:
 --------------------------------------------------------------------------------
-First, a note: Following these steps will move your current .bash_profile and
-.bashrc to a new directory called .config_backup. If you want to customize your
-environment, you should put them in a file called ".bash_<your-onyen>". For
-example, mine would be ".bash_psirving". This file will be loaded every time
-you log in, but it won't be tracked by git.
+First, check your path aren't overwritting the paths that are added in these
+dotfiles. If you already see paths to any Weeks Lab software or RNAstructure,
+you should edit the lines in your own dotfiles (`~/.bashrc` and
+`~/.bash_profile`) where you are adding these to your path.
 
-Log into Longleaf and install git:
 ```
-ssh <your-onyen>@longleaf.unc.edu
-Password: <your-password>
-module load git
-module save
+echo -e ${PATH//:/\\n}
+echo -e ${PYTHONPATH//:/\\n}
 ```
-Copy the install-dotfiles.sh file from this repo, and run it.
+
+Next, to make use of paths and the software in `/proj/kweeks/bin/`, add this
+line to `~/.bashrc`:
+
 ```
-wget 'https://raw.githubusercontent.com/Weeks-UNC/longleaf-dotfiles/master/install/install-dotfiles.sh'
-source install-dotfiles.sh
+source /proj/kweeks/bin/Longleaf-dotfiles/.bashrc
 ```
+
+This will take effect on your next log in, so go ahead and log out and back in.
+
+Finally, you should install Anaconda and use the included Anaconda environment
+to run all of this software:
+
+```
+module load anaconda
+conda env create -f /proj/kweeks/bin/Longleaf-dotfiles/map-env.yml
+```
+
+To activate this environment:
+
+```
+conda activate py2-MaP
+```
+
+Fingers crossed, all of the Weeks Lab software will work.
+
 
 TODO:
 --------------------------------------------------------------------------------
-- [ ] pipeline: put sample name in job name for easy reference
-- [ ] pipeline: create bash script wrapper to copy into 
+- map-pipeline:
+  - create bash script wrapper to copy into working directory
+  - create a README
+- dedupe-samples:
+  - create a README
+  - discuss drawbacks of deduping with Kevin
