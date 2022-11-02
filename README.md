@@ -39,11 +39,15 @@ source /proj/kweeks/bin/Longleaf-dotfiles/.bashrc
 
 This will take effect on your next log in, so go ahead and log out and back in.
 
-Finally, you should install Anaconda and use the included Anaconda environment
-to run all of this software:
+Finally, if you are not already using Anaconda, you should install Anaconda and
+use the included Anaconda environment to run Weeks Lab software. If you have
+another python module loaded, remove it first:
 
 ```
+module list
+module rm python # if necessary
 module load anaconda
+module save
 conda env create -f /proj/kweeks/bin/Longleaf-dotfiles/map-env.yml
 ```
 
@@ -52,6 +56,8 @@ To activate this environment:
 ```
 conda activate py2-MaP
 ```
+
+More information on managing conda environments [here](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
 
 Fingers crossed, all of the Weeks Lab software will work.
 
