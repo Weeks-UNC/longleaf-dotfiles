@@ -1,12 +1,6 @@
 # .alias
 
 # ==============================================================================
-# for doing git commands on ~/.cfg
-# ==============================================================================
-
-alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
-
-# ==============================================================================
 # List declared aliases, functions, paths
 # ==============================================================================
 
@@ -18,6 +12,9 @@ alias pythonpaths='echo -e ${PYTHONPATH//:/\\n}'
 # ==============================================================================
 # Directory listing/traversal
 # ==============================================================================
+
+alias ln-work="ln -s $work work"
+alias ln-proj="ln -s $proj proj"
 
 alias l="ls -lahA --color -G --group-directories-first"
 alias la="ls -a --color -G --group-directories-first"
