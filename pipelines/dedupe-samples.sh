@@ -5,7 +5,7 @@
 #SBATCH --time=1:00:00
 #SBATCH --mem=10g
 
-
+module purge
 module load bbmap
 module load umi_tools
 
