@@ -6,9 +6,10 @@
 #SBATCH --mem=10g
 
 
-source activate umi-tools
+module load bbmap
+module load umi_tools
 
 cd Sample_$SLURM_ARRAY_TASK_ID
-flash *R1_001.fastq.gz *R2_001.fastq.gz
+bbmerge.sh in1=*R1_001.fastq.gz in2=*R2_001.fastq.gz out=out.extendedFrags.fastq outu1=out.unmerged1.fastq outu2=out.unmerged2.fastq
 umi_tools extract --extract-method=regex --bc-pattern='(?P<umi_1>.{5}).*(?P<umi_2>.{5})' -I out.extendedFrags.fastq -S combined_trimmed.fastq
 dedupe.sh in=combined_trimmed.fastq out=combined_trimmed_deduped.fastq ac=f
